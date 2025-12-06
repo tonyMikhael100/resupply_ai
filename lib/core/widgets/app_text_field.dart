@@ -18,6 +18,7 @@ class AppTextField extends StatelessWidget {
     this.borderRadius,
     this.borderWidth = 1.0,
     this.maxLines,
+    this.onChanged,
   });
 
   final String hintText;
@@ -32,6 +33,7 @@ class AppTextField extends StatelessWidget {
   final BorderRadius? borderRadius;
   final double borderWidth;
   final int? maxLines;
+  final void Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,7 @@ class AppTextField extends StatelessWidget {
       controller: controller,
       obscureText: obscureText,
       validator: validator,
+      onChanged: onChanged,
       keyboardType: keyboardType,
       style: AppTextStyles.font12LightBlackWeight500,
       decoration: InputDecoration(

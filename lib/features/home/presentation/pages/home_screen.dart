@@ -1,173 +1,123 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:go_router/go_router.dart';
+import 'package:resupply_ai/core/utils/my_toast.dart';
 import 'package:resupply_ai/core/utils/spacing.dart';
-import 'package:resupply_ai/features/login/data/models/login_response_model.dart';
-import 'package:resupply_ai/core/widgets/app_text_field.dart';
+import 'package:resupply_ai/features/home/presentation/cubits/cubit/home_cubit.dart';
+import 'package:resupply_ai/features/home/presentation/widgets/home_row.dart';
+import 'package:resupply_ai/features/home/presentation/widgets/home_row_without_button.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key, required this.userData});
 
-  final userData = Hive.box<LoginResponseModel>('userBox').get('user');
-  final cageCode = Hive.box('cageCodeBox').get('cageCode');
+  final List<dynamic> userData;
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String searchValue = '';
+
+  /// Check if a map contains a key with a non-empty value
+  bool hasKey(Map<String, dynamic> map, String key) {
+    return map.containsKey(key) &&
+        map[key] != null &&
+        map[key].toString().isNotEmpty;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final items = widget.userData;
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(16.w),
-          child: Column(
-            children: [
-              Image.asset(
-                'assets/images/app_logo.png',
-                width: double.infinity,
-                height: 150.h,
-                fit: BoxFit.contain,
+          child: SingleChildScrollView(
+            child: BlocListener<HomeCubit, HomeState>(
+              listener: (context, state) {
+                if (state is HomeErrorState) {
+                  MyToast.error(context, 'not found');
+                } else if (state is HomeLoadedState) {
+                  // Navigate if map has data
+                  if (state.mainDetaislList.isNotEmpty) {
+                    context.push('/homeScreenDetails',
+                        extra: state.mainDetaislList);
+                  }
+                }
+              },
+              child: Column(
+                children: [
+                  /// App Logo
+                  Image.asset(
+                    'assets/images/app_logo.png',
+                    width: double.infinity,
+                    height: 150.h,
+                    fit: BoxFit.contain,
+                  ),
+
+                  verticalSpace(20),
+
+                  /// Build Rows From Map
+                  for (int i = 0; i < items.length; i++)
+                    _buildRow(items[i], context),
+                ],
               ),
-              SizedBox(height: 16.h),
-              Expanded(
-                child: Row(
-                  children: [
-                    // LEFT BLUE PANEL -------------------------------------
-                    Expanded(
-                      child: Container(
-                        color: const Color(0xff0B55A1),
-                        padding: EdgeInsets.only(left: 16.w, top: 20.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start, // FIXED
-                          children: [
-                            _leftLabel("SUPPLIER NAME"),
-                            SizedBox(height: 20.h),
-                            _leftLabel("CAGE CODE"),
-                            SizedBox(height: 20.h),
-                            _leftLabel("Enter NSN / Part No"),
-                            SizedBox(height: 20.h),
-                            _leftLabel("ENTER MANUFACTURER"),
-                            SizedBox(height: 20.h),
-                            _leftLabel("ENTER DESCRIPTION"),
-                            SizedBox(height: 20.h),
-                            _leftLabel("BIBLE SEARCH"),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    // RIGHT GRAY PANEL ------------------------------------
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        color: const Color(0xffD9D9D9),
-                        padding:
-                            EdgeInsets.only(left: 20.w, top: 20.h, right: 10.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween, // FIXED
-                          children: [
-                            // Supplier Name
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                userData?.supname ?? "N/A",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-
-                            SizedBox(height: 20.h),
-                            // Cage Code
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                cageCode ?? "N/A",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-
-                            _rowField(buttonText: "Get List"),
-                            SizedBox(height: 20.h),
-
-                            _rowField(buttonText: "Search"),
-                            SizedBox(height: 20.h),
-
-                            _rowField(buttonText: "Get List"),
-                            SizedBox(height: 20.h),
-
-                            _rowField(buttonText: "Search"),
-                            verticalSpace(20)
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _leftLabel(String text) {
-    return SizedBox(
-      width: double.infinity,
-      child: Text(
-        text,
-        textAlign: TextAlign.left,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 18.sp,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
+  /// Build each row dynamically based on the item map
+  Widget _buildRow(Map<String, dynamic> item, BuildContext context) {
+    final type = item["type"] ?? "";
+    final title = item["title"] ?? "";
+    final content = item["content"] ?? "";
+    final action = item["action"] ?? "";
+    final cleft = item["cleft"] ?? "000000";
+    final cright = item["cright"] ?? "000000";
 
-  /// Field + Button Row
-  Widget _rowField({required String buttonText}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // LEFT — FIELD aligned left
-        Expanded(
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: SizedBox(
-              height: 40.h,
-              child: AppTextField(
-                hintText: "",
-              ),
-            ),
-          ),
-        ),
+    // DATA row (no button)
+    if (type == "DATA") {
+      return HomeRowWithoutButton(
+        title: title,
+        value: content,
+        titleHex: cleft,
+        valueHex: cright,
+      );
+    }
 
-        SizedBox(width: 10.w),
+    // INPUT row with button
+    if (type == "INPUT" && action.isNotEmpty) {
+      return HomeRow(
+        title: title,
+        onChanged: (value) {
+          setState(() {
+            searchValue = value;
+          });
+        },
+        onPressed: () {
+          if (searchValue.isEmpty) {
+            MyToast.error(context, 'Please enter search value');
+            return;
+          }
 
-        // RIGHT — BUTTON
-        ElevatedButton(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xff5E66D1),
-            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
-          ),
-          child: Text(
-            buttonText,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ],
-    );
+          context.read<HomeCubit>().getAllProducts(
+                url: action,
+                searchValue: searchValue,
+              );
+        },
+        cleftHex: cleft,
+        crightHex: cright,
+        buttonText: item["buttext"] ?? "Search",
+      );
+    }
+
+    // Nothing to display
+    return const SizedBox.shrink();
   }
 }

@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:resupply_ai/core/themes/app_colors.dart';
 import 'package:resupply_ai/core/utils/my_toast.dart';
 import 'package:resupply_ai/core/utils/spacing.dart';
 import 'package:resupply_ai/core/widgets/app_button.dart';
 import 'package:resupply_ai/core/widgets/app_text_form_field.dart';
-import 'package:resupply_ai/features/login/data/models/login_response_model.dart';
 import 'package:resupply_ai/features/login/presentation/cubits/cubit/login_cubit.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -61,17 +61,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 verticalSpace(20),
                 BlocConsumer<LoginCubit, LoginState>(
+                  buildWhen: (previous, current) =>
+                      current is LoginLoading ||
+                      current is LoginSuccess ||
+                      current is LoginFailure,
                   listener: (context, state) {
                     if (state is LoginSuccess) {
                       MyToast.success(context, 'Login successful');
-                      context.push('/homeScreen');
+                      context.push('/homeScreen',
+                          extra: state.loginResponseMap);
                     } else if (state is LoginFailure) {
                       MyToast.error(context, state.errMessage);
                     }
                   },
                   builder: (context, state) {
                     if (state is LoginLoading) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primaryColor,
+                        ),
+                      );
                     }
                     return AppButton(
                       buttonText: 'Login',
@@ -80,9 +89,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           context.read<LoginCubit>().login(
                                 cageCode: _cageCodeController.text,
                                 password: _passwordController.text,
-                              );
-                          context.read<LoginCubit>().saveCageCode(
-                                _cageCodeController.text,
                               );
                         }
                       },

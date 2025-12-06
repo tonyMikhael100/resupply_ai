@@ -17,15 +17,9 @@ class LoginCubit extends Cubit<LoginState> {
         print(failure.errorMessage);
         emit(LoginFailure(failure.errorMessage));
       },
-      (success) {
-        emit(LoginSuccess());
+      (loginResponseModel) {
+        emit(LoginSuccess(loginResponseModel));
       },
     );
-  }
-
-  saveCageCode(String cageCode) async {
-    var box = await Hive.box('cageCodeBox');
-    box.put('cageCode', cageCode);
-    emit(LoginSaveCageCodeState(cageCode));
   }
 }

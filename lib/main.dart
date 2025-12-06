@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:resupply_ai/core/routing/app_router.dart';
 import 'package:resupply_ai/core/themes/app_colors.dart';
-import 'package:resupply_ai/features/login/data/models/login_response_model.dart';
+import 'package:resupply_ai/features/home/presentation/cubits/cubit/home_cubit.dart';
 import 'package:resupply_ai/features/login/presentation/cubits/cubit/login_cubit.dart';
 import 'package:resupply_ai/features/login/presentation/pages/login_screen.dart';
 import 'package:toastification/toastification.dart';
@@ -12,13 +12,7 @@ import 'package:toastification/toastification.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  // Register Hive adapters
-  Hive.registerAdapter(LoginResponseModelAdapter());
-  Hive.registerAdapter(LoginItemAdapter());
-  await Hive.openBox('cageCodeBox');
 
-  // Optional: open a box now
-  await Hive.openBox<LoginResponseModel>('userBox');
   runApp(const MyApp());
 }
 
@@ -33,6 +27,7 @@ class MyApp extends StatelessWidget {
       child: ToastificationWrapper(
         child: MultiBlocProvider(
           providers: [
+            BlocProvider(create: (context) => HomeCubit()),
             BlocProvider(create: (context) => LoginCubit()),
           ],
           child: MaterialApp.router(

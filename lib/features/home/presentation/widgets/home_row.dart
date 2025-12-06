@@ -61,7 +61,7 @@ class HomeRow extends StatelessWidget {
                 Expanded(
                   child: AppTextField(
                     hintText: '',
-                    onChanged:onChanged ,
+                    onChanged: onChanged,
                   ),
                 ),
                 horizontalSpace(5),

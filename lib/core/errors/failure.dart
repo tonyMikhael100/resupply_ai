@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Failure {
   final String errorMessage;
@@ -76,48 +75,5 @@ class ServerFailure extends Failure {
         }
         return 'Something went wrong (${statusCode ?? 'unknown error'}).';
     }
-  }
-}
-
-class CacheFailure extends Failure {
-  CacheFailure({required super.errorMessage});
-}
-
-class SupbaseFailure extends Failure {
-  SupbaseFailure({required super.errorMessage});
-
-  /// Handle Postgrest exceptions
-  factory SupbaseFailure.postgrestErrorHandler(PostgrestException error) {
-    final code = error.code; // string, e.g., '23505' for conflict
-
-    switch (code) {
-      case '23505':
-        return SupbaseFailure(
-            errorMessage: 'Conflict occurred, please try again.');
-      case '23503':
-        return SupbaseFailure(errorMessage: 'Foreign key violation.');
-      case '23502':
-        return SupbaseFailure(errorMessage: 'Missing required value.');
-      case '42601':
-        return SupbaseFailure(
-            errorMessage: 'Bad request, please check your input.');
-      case '42501':
-        return SupbaseFailure(
-            errorMessage: 'Access denied, you don’t have permission.');
-      case '28P01':
-        return SupbaseFailure(
-            errorMessage: 'Unauthorized, please login again.');
-      default:
-        return SupbaseFailure(
-            errorMessage:
-                error.message ?? 'Unexpected database error occurred.');
-    }
-  }
-
-  /// Handle Supabase Auth exceptions
-  factory SupbaseFailure.authErrorHandler(AuthException error) {
-    return SupbaseFailure(
-      errorMessage: error.message ?? 'Authentication failed, please try again.',
-    );
   }
 }

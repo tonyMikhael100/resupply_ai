@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:resupply_ai/core/themes/app_colors.dart';
-import 'package:resupply_ai/core/themes/app_text_styles.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton({
     super.key,
     required this.buttonText,
     required this.onPressed,
-    this.backgroundColor = AppColors.primaryColor,
-    this.textColor = AppColors.white,
+    this.backgroundColor = const Color(0xFF1B5EB8),
+    this.textColor = Colors.white,
     this.textStyle,
     this.borderRadius,
     this.height,
@@ -41,13 +39,17 @@ class AppButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(16.r),
           ),
-          padding: padding,
+          padding: padding ?? EdgeInsets.symmetric(horizontal: 16.w),
         ),
         child: child ??
             Text(
               buttonText,
               style: textStyle ??
-                  AppTextStyles.font16WhiteBold.copyWith(color: textColor),
+                  TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: textColor,
+                  ),
             ),
       ),
     );

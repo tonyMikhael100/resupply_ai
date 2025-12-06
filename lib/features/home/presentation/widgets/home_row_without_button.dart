@@ -28,13 +28,12 @@ class HomeRowWithoutButton extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
-            height: 130.h,
             color: _hexToColor(titleHex),
             padding: EdgeInsets.all(20),
             child: Text(
               title,
               style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: 12.sp,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
@@ -43,13 +42,12 @@ class HomeRowWithoutButton extends StatelessWidget {
         ),
         Expanded(
           child: Container(
-            height: 130.h,
             color: _hexToColor(valueHex),
             padding: EdgeInsets.all(20),
             child: Text(
               value,
               style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: 12.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),

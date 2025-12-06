@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.userData);
     final items = widget.userData;
 
     return Scaffold(

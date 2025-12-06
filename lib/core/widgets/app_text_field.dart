@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:resupply_ai/core/themes/app_colors.dart';
-import 'package:resupply_ai/core/themes/app_text_styles.dart';
 
 class AppTextField extends StatelessWidget {
   const AppTextField({
@@ -48,10 +47,10 @@ class AppTextField extends StatelessWidget {
       validator: validator,
       onChanged: onChanged,
       keyboardType: keyboardType,
-      style: AppTextStyles.font12LightBlackWeight500,
+      style: TextStyle(fontSize: 16.sp, color: AppColors.black),
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: AppTextStyles.font12LightBlackWeight500,
+        hintStyle: TextStyle(fontSize: 16.sp, color: AppColors.geryLight),
         filled: true,
         fillColor: fillColor,
         contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),

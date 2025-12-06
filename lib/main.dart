@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:resupply_ai/core/routing/app_router.dart';
 import 'package:resupply_ai/core/themes/app_colors.dart';
 import 'package:resupply_ai/features/home/presentation/cubits/cubit/home_cubit.dart';
@@ -11,7 +10,6 @@ import 'package:toastification/toastification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
 
   runApp(const MyApp());
 }

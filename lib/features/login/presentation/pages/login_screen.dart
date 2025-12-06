@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:resupply_ai/core/themes/app_colors.dart';
 import 'package:resupply_ai/core/utils/my_toast.dart';
 import 'package:resupply_ai/core/utils/spacing.dart';

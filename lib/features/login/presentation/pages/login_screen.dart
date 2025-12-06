@@ -83,6 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                     return AppButton(
                       buttonText: 'Login',
+                      backgroundColor: AppColors.primaryColor,
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           context.read<LoginCubit>().login(

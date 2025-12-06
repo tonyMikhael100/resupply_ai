@@ -81,7 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final action = item["action"] ?? "";
     final cleft = item["cleft"] ?? "000000";
     final cright = item["cright"] ?? "000000";
-
     // DATA row (no button)
     if (type == "DATA") {
       return HomeRowWithoutButton(

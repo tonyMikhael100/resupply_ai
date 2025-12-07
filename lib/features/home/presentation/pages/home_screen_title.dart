@@ -37,7 +37,6 @@ class _HomeScreenTitleState extends State<HomeScreenTitle> {
                   height: 150.h,
                   fit: BoxFit.contain,
                 ),
-
                 verticalSpace(20),
 
                 /// Build Rows From Map

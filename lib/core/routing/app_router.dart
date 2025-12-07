@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:resupply_ai/features/home/data/models/main_details_model.dart';
 import 'package:resupply_ai/features/home/presentation/pages/home_screen.dart';
 import 'package:resupply_ai/features/home/presentation/pages/home_screen_details.dart';
 import 'package:resupply_ai/features/home/presentation/pages/home_screen_title.dart';

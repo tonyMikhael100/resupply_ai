@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:resupply_ai/features/home/data/models/main_details_model.dart';
 import 'package:resupply_ai/features/home/data/repo/home_repo_impl.dart';
 
 part 'home_state.dart';

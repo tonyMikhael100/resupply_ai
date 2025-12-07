@@ -41,9 +41,10 @@ class HomeRow extends StatelessWidget {
             color: _hexToColor(cleftHex),
             child: Text(
               title,
+              textAlign: TextAlign.start,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 18.sp,
+                fontSize: 12.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),

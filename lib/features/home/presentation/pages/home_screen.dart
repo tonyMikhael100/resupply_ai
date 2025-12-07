@@ -36,37 +36,43 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Padding(
           padding: EdgeInsets.all(16.w),
           child: SingleChildScrollView(
-            child: BlocListener<HomeCubit, HomeState>(
-              listener: (context, state) {
-                if (state is HomeErrorState) {
-                  MyToast.error(context, 'not found');
-                } else if (state is HomeLoadedState) {
-                  // Navigate if map has data
-                  if (state.mainDetaislList.isNotEmpty) {
-                    context.push('/homeScreenDetails',
-                        extra: state.mainDetaislList);
+              child: BlocListener<HomeCubit, HomeState>(
+            listener: (context, state) {
+              if (state is HomeErrorState) {
+                MyToast.error(context, 'not found');
+              }
+
+              if (state is HomeLoadedState) {
+                if (state.mainDetaislList.isNotEmpty) {
+                  // Check if contains "title"
+                  if (state.isContainTitle == true) {
+                    context.push(
+                      '/homeScreenTitle',
+                      extra: state.mainDetaislList,
+                    );
+                  } else {
+                    context.push(
+                      '/homeScreenDetails',
+                      extra: state.mainDetaislList,
+                    );
                   }
                 }
-              },
-              child: Column(
-                children: [
-                  /// App Logo
-                  Image.asset(
-                    'assets/images/app_logo.png',
-                    width: double.infinity,
-                    height: 150.h,
-                    fit: BoxFit.contain,
-                  ),
-
-                  verticalSpace(20),
-
-                  /// Build Rows From Map
-                  for (int i = 0; i < items.length; i++)
-                    _buildRow(items[i], context),
-                ],
-              ),
+              }
+            },
+            child: Column(
+              children: [
+                Image.asset(
+                  'assets/images/app_logo.png',
+                  width: double.infinity,
+                  height: 150.h,
+                  fit: BoxFit.contain,
+                ),
+                verticalSpace(20),
+                for (int i = 0; i < items.length; i++)
+                  _buildRow(items[i], context),
+              ],
             ),
-          ),
+          )),
         ),
       ),
     );
@@ -105,6 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
             return;
           }
 
+          print(action);
           context.read<HomeCubit>().getAllProducts(
                 url: action,
                 searchValue: searchValue,

@@ -23,6 +23,7 @@ class _HomeScreenTitleState extends State<HomeScreenTitle> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(16.w),

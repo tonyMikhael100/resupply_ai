@@ -10,7 +10,6 @@ class HomeRepoImpl implements HomeRepo {
     required String url,
     String? searchValue,
   }) async {
-    print('entered');
     try {
       final response = await apiService.get(
         url,
@@ -19,7 +18,6 @@ class HomeRepoImpl implements HomeRepo {
           'var': searchValue ?? '',
         },
       );
-      print(url);
       print(response);
       return Right(response);
     } on Exception catch (e) {

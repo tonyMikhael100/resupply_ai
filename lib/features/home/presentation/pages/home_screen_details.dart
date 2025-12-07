@@ -21,7 +21,7 @@ class HomeScreenDetails extends StatelessWidget {
     final int rowCount = nsnList.length;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Home Details Table')),
+      appBar: AppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
